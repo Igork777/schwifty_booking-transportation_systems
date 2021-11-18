@@ -20,6 +20,7 @@ Project is created with:
 * Blazor
 * WebSockets
 * SQLite
+* REST API
 
 ## Implemented functionality
 
