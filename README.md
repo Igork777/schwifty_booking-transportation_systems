@@ -19,6 +19,7 @@ Project is created with:
 * .NET
 * Blazor
 * WebSockets
+* SQLite
 
 ## Implemented functionality
 
