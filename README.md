@@ -12,7 +12,7 @@ The Logic layer uses .Net.
 The presentation layer uses .Net and Blazor.
 
 ## Technologies
-Project is created with:
+The project is created with:
 * Java
 * Maven
 * Hibernate
