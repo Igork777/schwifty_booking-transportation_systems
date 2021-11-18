@@ -1,0 +1,70 @@
+﻿@using Driver.Services.order
+@inject IAuthenticationService AuthenticationService
+@inject AbstractOrderService OrderService;
+
+<!-- Styles -->
+<link rel="stylesheet" href="css/components/NavMenu.css">
+
+<!-- Content -->
+<header class="header @HeaderFixedCssClass @HeaderPaddingCssClass">
+    <div class="header__navigation">
+        <div class="header__logo">
+            <NavLink href="" Match="NavLinkMatch.All">
+                <h1 class="header__schwifty">schwifty</h1>
+            </NavLink>
+        </div>
+        <div class="header__actions">
+            @if (AuthenticationService.User == null)
+            {
+                <NavLink href="create-account/form" class="header__link">Sign up</NavLink>
+                <NavLink href="login" class="header__link active">Log in</NavLink>
+            }
+            else
+            {
+                <div hidden="@HasActiveOrders">
+                    <NavLink href="orders" class="header__link">Orders</NavLink>
+                </div>
+                <div hidden="@(!HasActiveOrders)">
+                    <NavLink href="active-order" class="header__link">Active order</NavLink>
+                </div>
+
+            }
+
+            <div class="header__nav-toggle">
+                <svg width="26" height="12" viewBox="0 0 26 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="26" height="2" fill="black"/>
+                    <rect y="10" width="26" height="2" fill="black"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <nav class="nav">
+
+    </nav>
+</header>
+
+<!-- Code -->
+
+@code {
+
+    private bool HasActiveOrders => OrderService.hasActiveOrder();
+    
+    [Parameter]
+    public bool IsFixed { get; set; }
+
+    [Parameter]
+    public bool HasPadding { get; set; }
+
+    private string HeaderFixedCssClass => IsFixed ? "header--fixed" : null;
+
+    private string HeaderPaddingCssClass => HasPadding ? "header--padding" : null;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationService.User != null)
+        {
+            await OrderService.UpdMyActiveOrder();
+        }
+        await base.OnInitializedAsync();
+    }
+}

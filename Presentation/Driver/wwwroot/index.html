@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DriverBlazorWA</title>
+    <base href="/" />
+    <!--<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />-->
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .app-initialization {
+            align-items: center;
+            background-color: #ffffff;
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            position: fixed;
+            width: 100%;
+        }
+
+        .brand-title {
+            color: #000000;
+            font-family: 'Poppins', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            /* animation initial state */
+            opacity: 0;
+            transform: translateY(50%);
+            /* animation */
+            animation: fade-in 600ms ease forwards;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(50%);
+            }
+
+            25% {
+                opacity: 0;
+                transform: translateY(50%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <app id="app">
+        <div class="app-initialization">
+            <h1 class="brand-title brand-title--animation-props">schwifty</h1>
+        </div>
+    </app>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script>
+    </script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+
+
+        var startingAddress;
+        var destinationAddress;
+        // Initialize and add the map
+        function initMap(_startingAddress, _destinationAddress){
+            startingAddress = _startingAddress;
+            destinationAddress = _destinationAddress;
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+        // On success
+        function success(pos) {
+            let langAndLat = createObjLatAndLong(pos);
+            const map = intializeDanishMap(langAndLat);
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsRenderer)
+        };
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) 
+        {
+            console.log("start: "+startingAddress)
+            directionsService.route(
+                {
+                    origin: {
+                        query: ""+startingAddress,
+                    },
+                    destination: {
+                        query: ""+destinationAddress,
+                    },
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (response, status) =>{
+                    directionsRenderer.setDirections(response);
+                }
+                );
+        }
+        function intializeDanishMap(langAndLat) {
+            const DENMARK_Bounds = {
+                north: 57.73,
+                south: 54.80,
+                west: 8.09,
+                east: 12.69
+            }
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: langAndLat,
+                disableDefaultUI: true,
+                restriction: {
+                    latLngBounds: DENMARK_Bounds,
+                    strictBounds: false,
+                }
+            });
+            return map;
+        }
+        
+        function createObjLatAndLong(pos) {
+            let crd = pos.coords;
+            let latitud = crd.latitude;
+            let longitud = crd.longitude;
+            return {lat: latitud, lng: longitud};
+        }
+        function error() {
+            console.log("Unable to retrieve your location");
+        }
+    </script>
+    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgxC4saQ9uOCZE_JHOFvEUK-3VnsPqAdQ&libraries=places"></script>
+</body>
+</body>
+
+</html>
