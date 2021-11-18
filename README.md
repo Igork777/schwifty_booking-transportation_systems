@@ -1,7 +1,7 @@
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Implemented functionality](#implemented functionality)
+* [Implemented functionality](#implemented-functionality)
 * [Link to the video presentation](#link-to-the-video-presentation)
 
 ## General info
@@ -42,4 +42,6 @@ find one suitable for me.
 to see the information presented on the
 profiles.
 
+## Link to the video presentation
+https://www.youtube.com/watch?v=sBayZnM_6SM 
 
